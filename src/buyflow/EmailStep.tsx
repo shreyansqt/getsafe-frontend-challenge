@@ -7,7 +7,12 @@ interface EmailStepProps {
 const EmailStep: React.FC<EmailStepProps> = (props) => {
   const [email, setEmail] = useState('')
   return (
-    <>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        props.cb('email', email)
+      }}
+    >
       <div>
         Email:{' '}
         <input
@@ -16,10 +21,11 @@ const EmailStep: React.FC<EmailStepProps> = (props) => {
             setEmail(value)
           }}
           value={email}
-        ></input>
+          required
+        />
       </div>
-      <button onClick={() => props.cb('email', email)}>Next</button>
-    </>
+      <button type="submit">Next</button>
+    </form>
   )
 }
 
