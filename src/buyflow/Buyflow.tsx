@@ -17,6 +17,7 @@ const PRODUCT_IDS_TO_NAMES = {
   [ProductIds.devIns]: 'Developer Insurance',
 }
 
+// order of this enum is crucial for step order
 enum Step {
   Name,
   Email,
@@ -25,7 +26,7 @@ enum Step {
 }
 
 const Buyflow: React.FC<BuyflowProps> = (props) => {
-  const [currentStep, setStep] = useState<Step>(Step.Name)
+  const [currentStep, setStep] = useState<Step>(0)
   const [collectedData, updateData] = useState<CollectedData>({
     firstName: '',
     lastName: '',
@@ -33,22 +34,27 @@ const Buyflow: React.FC<BuyflowProps> = (props) => {
     age: 0,
   })
 
-  const getStepCallback = (nextStep: Step) => (
+  const stepCallback = (
     field: keyof CollectedData,
     value: CollectedData[typeof field]
   ) => {
     updateData((collectedData) => ({ ...collectedData, [field]: value }))
-    setStep(nextStep)
+
+    // find next step and set state
+    const nextStepKey = Object.values(Step)[
+      currentStep + 1
+    ] as keyof typeof Step
+    setStep(Step[nextStepKey])
   }
 
   const getStepComponent = (step: Step) => {
     switch (step) {
       case Step.Name:
-        return <NameStep cb={getStepCallback(Step.Email)} />
+        return <NameStep cb={stepCallback} />
       case Step.Email:
-        return <EmailStep cb={getStepCallback(Step.Age)} />
+        return <EmailStep cb={stepCallback} />
       case Step.Age:
-        return <AgeStep cb={getStepCallback(Step.Summary)} />
+        return <AgeStep cb={stepCallback} />
       case Step.Summary:
         return <SummaryStep collectedData={collectedData} />
       default:
