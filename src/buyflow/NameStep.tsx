@@ -1,14 +1,27 @@
-import React, { useState } from 'react'
+import React, { InputHTMLAttributes, useState } from 'react'
 
 interface NameStepProps {
   cb: (field: string, value: string) => void
+}
+
+const requiredInputProps: InputHTMLAttributes<HTMLInputElement> = {
+  required: true,
+  pattern: '.*\\S+.*', // disallows empty spaces
+  // most browsers use the title attribute in the error message
+  title: 'This field is required, empty spaces are not allowed',
 }
 
 const NameStep: React.FC<NameStepProps> = (props) => {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   return (
-    <>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        props.cb('firstName', firstName)
+        props.cb('lastName', lastName)
+      }}
+    >
       <div>
         First Name:{' '}
         <input
@@ -17,6 +30,7 @@ const NameStep: React.FC<NameStepProps> = (props) => {
             setFirstName(value)
           }}
           value={firstName}
+          {...requiredInputProps}
         />
       </div>
       <div>
@@ -27,17 +41,11 @@ const NameStep: React.FC<NameStepProps> = (props) => {
             setLastName(value)
           }}
           value={lastName}
+          {...requiredInputProps}
         />
       </div>
-      <button
-        onClick={() => {
-          props.cb('firstName', firstName)
-          props.cb('lastName', lastName)
-        }}
-      >
-        Next
-      </button>
-    </>
+      <button type="submit">Next</button>
+    </form>
   )
 }
 
