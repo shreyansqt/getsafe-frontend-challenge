@@ -16,8 +16,15 @@ const PRODUCT_IDS_TO_NAMES = {
   [ProductIds.devIns]: 'Developer Insurance',
 }
 
+enum Step {
+  Name,
+  Email,
+  Age,
+  Summary,
+}
+
 const Buyflow: React.FC<BuyflowProps> = (props) => {
-  const [currentStep, setStep] = useState('name')
+  const [currentStep, setStep] = useState<Step>(Step.Name)
   const [collectedData, updateData] = useState({
     firstName: '',
     lastName: '',
@@ -25,20 +32,20 @@ const Buyflow: React.FC<BuyflowProps> = (props) => {
     age: 0,
   })
 
-  const getStepCallback = (nextStep: string) => (field: string, value: any) => {
+  const getStepCallback = (nextStep: Step) => (field: string, value: any) => {
     updateData((collectedData) => ({ ...collectedData, [field]: value }))
     setStep(nextStep)
   }
 
-  const getStepComponent = (step: string) => {
+  const getStepComponent = (step: Step) => {
     switch (step) {
-      case 'name':
-        return <NameStep cb={getStepCallback('email')} />
-      case 'email':
-        return <EmailStep cb={getStepCallback('age')} />
-      case 'age':
-        return <AgeStep cb={getStepCallback('summary')} />
-      case 'summary':
+      case Step.Name:
+        return <NameStep cb={getStepCallback(Step.Email)} />
+      case Step.Email:
+        return <EmailStep cb={getStepCallback(Step.Age)} />
+      case Step.Age:
+        return <AgeStep cb={getStepCallback(Step.Summary)} />
+      case Step.Summary:
         return <SummaryStep collectedData={collectedData} />
       default:
         console.error(`Step "${step}" doesn't exist`)
