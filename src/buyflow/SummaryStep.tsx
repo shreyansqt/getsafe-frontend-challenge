@@ -1,13 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { CollectedData } from './types'
 
 interface SummaryStepProps {
-  collectedData: {
-    firstName: string
-    lastName: string
-    email: string
-    age: number
-  }
+  collectedData: CollectedData
 }
 
 const SummaryStep: React.FC<SummaryStepProps> = (props) => {

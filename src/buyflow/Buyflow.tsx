@@ -3,6 +3,7 @@ import AgeStep from './AgeStep'
 import EmailStep from './EmailStep'
 import NameStep from './NameStep'
 import SummaryStep from './SummaryStep'
+import { CollectedData } from './types'
 
 interface BuyflowProps {
   productId: ProductIds
@@ -25,14 +26,17 @@ enum Step {
 
 const Buyflow: React.FC<BuyflowProps> = (props) => {
   const [currentStep, setStep] = useState<Step>(Step.Name)
-  const [collectedData, updateData] = useState({
+  const [collectedData, updateData] = useState<CollectedData>({
     firstName: '',
     lastName: '',
     email: '',
     age: 0,
   })
 
-  const getStepCallback = (nextStep: Step) => (field: string, value: any) => {
+  const getStepCallback = (nextStep: Step) => (
+    field: keyof CollectedData,
+    value: CollectedData[typeof field]
+  ) => {
     updateData((collectedData) => ({ ...collectedData, [field]: value }))
     setStep(nextStep)
   }

@@ -1,7 +1,11 @@
 import React, { InputHTMLAttributes, useState } from 'react'
+import { CollectedData } from './types'
 
 interface NameStepProps {
-  cb: (field: string, value: string) => void
+  cb: (
+    field: keyof Pick<CollectedData, 'firstName' | 'lastName'>,
+    value: CollectedData[typeof field]
+  ) => void
 }
 
 const requiredInputProps: InputHTMLAttributes<HTMLInputElement> = {

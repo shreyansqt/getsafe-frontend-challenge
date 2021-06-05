@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
+import { CollectedData } from './types'
 
 interface AgeStepProps {
-  cb: (field: string, value: number) => void
+  cb: (
+    field: keyof Pick<CollectedData, 'age'>,
+    value: CollectedData[typeof field]
+  ) => void
 }
 
 const AgeStep: React.FC<AgeStepProps> = (props) => {

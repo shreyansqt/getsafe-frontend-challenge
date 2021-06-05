@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
+import { CollectedData } from './types'
 
 interface EmailStepProps {
-  cb: (field: string, value: string) => void
+  cb: (
+    field: keyof Pick<CollectedData, 'email'>,
+    value: CollectedData[typeof field]
+  ) => void
 }
 
 const EmailStep: React.FC<EmailStepProps> = (props) => {
