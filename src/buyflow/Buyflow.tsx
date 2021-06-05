@@ -24,23 +24,32 @@ const Buyflow: React.FC<BuyflowProps> = (props) => {
     email: '',
     age: 0,
   })
+
   const getStepCallback = (nextStep: string) => (field: string, value: any) => {
     updateData((collectedData) => ({ ...collectedData, [field]: value }))
     setStep(nextStep)
   }
+
+  const getStepComponent = (step: string) => {
+    switch (step) {
+      case 'name':
+        return <NameStep cb={getStepCallback('email')} />
+      case 'email':
+        return <EmailStep cb={getStepCallback('age')} />
+      case 'age':
+        return <AgeStep cb={getStepCallback('summary')} />
+      case 'summary':
+        return <SummaryStep collectedData={collectedData} />
+      default:
+        console.error(`Step "${step}" doesn't exist`)
+        return null
+    }
+  }
+
   return (
     <>
       <h4>Buying {PRODUCT_IDS_TO_NAMES[props.productId]}</h4>
-      {(currentStep === 'name' && <NameStep cb={getStepCallback('email')} />) ||
-        (currentStep === 'email' && (
-          <EmailStep cb={getStepCallback('age')} />
-        )) ||
-        (currentStep === 'age' && (
-          <AgeStep cb={getStepCallback('summary')} />
-        )) ||
-        (currentStep === 'summary' && (
-          <SummaryStep collectedData={collectedData} />
-        ))}
+      {getStepComponent(currentStep)}
     </>
   )
 }
